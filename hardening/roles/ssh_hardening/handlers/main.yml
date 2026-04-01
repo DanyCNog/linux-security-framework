@@ -1,5 +1,6 @@
 ---
 # hardening/roles/ssh_hardening/handlers/main.yml
+# Handlers triggered by task state changes
 
 - name: Restart SSH
   service:

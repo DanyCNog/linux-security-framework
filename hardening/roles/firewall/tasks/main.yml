@@ -1,19 +1,20 @@
 ---
 # hardening/roles/firewall/tasks/main.yml
+# Tasks to configure and enable the Uncomplicated Firewall (UFW)
 
-- name: Garantir que o pacote UFW (Firewall) está instalado
+- name: Ensure the UFW package is installed
   apt:
     name: ufw
     state: present
     update_cache: yes
 
-- name: Permitir tráfego SSH (Crítico para não perdermos acesso!)
+- name: Allow incoming SSH traffic (Critical to prevent administrative lockouts)
   ufw:
     rule: allow
     port: '22'
     proto: tcp
 
-- name: Ativar a Firewall e negar tráfego de entrada por defeito (Default Deny)
+- name: Enable the firewall with a default deny policy for incoming traffic
   ufw:
     state: enabled
     direction: incoming

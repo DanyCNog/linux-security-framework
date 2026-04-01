@@ -1,9 +1,10 @@
 ---
 # hardening/playbooks/hardening.yml
+# Main playbook to orchestrate the security hardening roles
 
-- name: Aplicar Linux Hardening Framework
+- name: Apply Linux Security Hardening Framework
   hosts: servers
-  become: yes # Executar com privilégios sudo
+  become: yes # Execute tasks with privilege escalation (root/sudo)
   roles:
     - ../roles/ssh_hardening
     - ../roles/firewall
