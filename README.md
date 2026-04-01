@@ -69,54 +69,54 @@ Follow these instructions to set up, enforce, and audit the security baseline on
 
 ### Step 1: Clone the Repository
 Download the framework to your Control Node (e.g., your local machine or an admin server):
-` ` `bash
+bash
 git clone https://github.com/YOUR_USERNAME/linux-security-framework.git
 cd linux-security-framework
-` ` `
+
 *(Note: Replace `YOUR_USERNAME` with your actual GitHub username).*
 
 ### Step 2: Configure the Target Environment
 The framework needs to know which server to secure. Edit the Ansible inventory file:
-` ` `bash
+bash
 nano hardening/inventory/hosts.ini
-` ` `
+
 - Replace the default IP (`172.16.89.131`) with the IP address of your Target Node.
 - Update the `ansible_user=fogadmin` variable to match the administrative user on your Target Node.
 
 ### Step 3: Establish SSH Trust
 To allow Ansible and Python to connect securely without manual password prompts, set up SSH key-based authentication:
-` ` `bash
+bash
 # 1. Generate an SSH key pair (if you don't have one already)
 ssh-keygen -t ed25519
 
 # 2. Copy your public key to the Target Node
 ssh-copy-id your_user@your_target_ip
-` ` `
+
 
 ### Step 4: Apply Security Hardening (Ansible)
 Execute the main playbook to enforce the security policies (SSH lockdown and UFW firewall configuration). The `-K` flag will prompt you for the target user's `sudo` password to allow privilege escalation.
-` ` `bash
+bash
 ansible-playbook -i hardening/inventory/hosts.ini hardening/playbooks/hardening.yml -K
-` ` `
+
 *You should see tasks marked as `changed` on the first run, and `ok` on subsequent runs (idempotency).*
 
 ### Step 5: Run the Compliance Audit (Python)
 Once the hardening is complete, execute the automated scanner to independently verify that the security controls are actively running on the Target Node:
-` ` `bash
+bash
 python3 scanner/main.py
-` ` `
+
 
 ### Output and Reporting
 The scanner will output the audit results directly to your terminal and save a persistent JSON report locally at `scanner/report/report.json`.
 
 **Example Output:**
-` ` `json
+json
 {
     "ssh_root_login_disabled": "PASS",
     "ssh_empty_passwords_disabled": "PASS",
     "firewall_ufw_active": "PASS"
 }
-` ` `
+
 
 
 ## Future Roadmap
