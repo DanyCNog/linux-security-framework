@@ -1,0 +1,5 @@
+{
+    "ssh_root_login_disabled": "PASS",
+    "ssh_empty_passwords_disabled": "PASS",
+    "firewall_ufw_active": "PASS"
+}

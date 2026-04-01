@@ -1,0 +1,7 @@
+---
+# hardening/roles/ssh_hardening/handlers/main.yml
+
+- name: Restart SSH
+  service:
+    name: ssh
+    state: restarted

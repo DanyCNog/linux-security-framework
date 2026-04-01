@@ -1,0 +1,9 @@
+---
+# hardening/playbooks/hardening.yml
+
+- name: Aplicar Linux Hardening Framework
+  hosts: servers
+  become: yes # Executar com privilégios sudo
+  roles:
+    - ../roles/ssh_hardening
+    - ../roles/firewall

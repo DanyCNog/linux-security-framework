@@ -1,0 +1,20 @@
+---
+# hardening/roles/ssh_hardening/tasks/main.yml
+
+- name: Garantir que o login como root por SSH está desativado (CIS Benchmark)
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PermitRootLogin'
+    line: 'PermitRootLogin no'
+    state: present
+    validate: /usr/sbin/sshd -t -f %s
+  notify: Restart SSH
+
+- name: Desativar passwords vazias (Empty Passwords)
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PermitEmptyPasswords'
+    line: 'PermitEmptyPasswords no'
+    state: present
+    validate: /usr/sbin/sshd -t -f %s
+  notify: Restart SSH
