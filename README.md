@@ -15,6 +15,19 @@ The framework operates on a continuous compliance model:
 - **Target Node:** A Linux server acting as the subject of the hardening procedures.
 - **Control Node:** The administrative machine executing the Ansible playbooks and Python scanner via SSH public key authentication.
 
+## How it Works
+
+### The Hardening Engine (Ansible)
+To prevent manual configuration errors, this framework leverages native Ansible modules (`lineinfile`, `ufw`, `apt`). 
+- **SSH Security:** The playbook parses the `/etc/ssh/sshd_config` file using Regular Expressions (Regex) to find vulnerable parameters like `PermitRootLogin`. It replaces them with secure values and strictly validates the file syntax (`validate: /usr/sbin/sshd -t -f %s`) before saving, preventing accidental administrative lockouts.
+- **Network Security:** It programmatically ensures the `ufw` package is present, explicitly opens the SSH port first, and only then enables the firewall with a strict default-deny policy.
+
+### The Audit Engine
+The `main.py` script acts as an independent remote auditor. 
+- It utilizes the Python `subprocess` module to establish an SSH connection to the target server using key-based authentication.
+- It injects native Linux commands (e.g., `grep` for file parsing, `systemctl` for service status) into the remote shell.
+- By programmatically evaluating the exit codes (return code `0` for success) and standard outputs, the script determines if a security control is currently active, compiling the final state into a readable JSON report.
+
 ### Key Capabilities
 
 - **SSH Hardening:** Disables root login and empty passwords, enforcing secure remote access policies.
